@@ -1,0 +1,7 @@
+librosa
+numpy
+pandas
+joblib
+scikit-learn
+hmmlearn
+tensorflow==1.15
