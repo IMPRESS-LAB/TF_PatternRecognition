@@ -2,8 +2,10 @@ import os
 import librosa
 import numpy as np
 import pandas as pd
-
+import sys
 from itertools import chain
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from config.config import get_config
 
 config = get_config()
@@ -93,6 +95,6 @@ if __name__ == "__main__":
         # 특징 저장
         mel_save = val.replace('.wav', '.ls')
         mfc_save = val.replace('.wav', '.mfc')
-        
+
         np.savetxt(f"{DATA_PATH}/mel/fold{fileFold[idx]}/{mel_save}", mel_feat)
         np.savetxt(f"{DATA_PATH}/mfc/fold{fileFold[idx]}/{mfc_save}", mfc_feat)

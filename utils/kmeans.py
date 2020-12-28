@@ -47,18 +47,18 @@ class KMEANS():
         return np.asarray(data_shuffle), np.asarray(labels_shuffle)
 
     def train(self, k, train_set, valid_set):
-        train_mfccs, train_folds, train_labels = zip(*list(chain(*train_set)))
-        train_mfccs, train_folds, train_labels = np.array(train_mfccs), np.array(train_folds), np.array(train_labels)
+        train_wavs, train_folds, train_labels = zip(*list(chain(*train_set)))
+        train_wavs, train_folds, train_labels = np.array(train_wavs), np.array(train_folds), np.array(train_labels)
 
-        train_sample = len(train_mfccs)
-        train_x, _ = self.fix_frame(train_sample, train_mfccs, train_folds, train_labels)
+        train_sample = len(train_wavs)
+        train_x, _ = self.fix_frame(train_sample, train_wavs, train_folds, train_labels)
 
         # Test Model
-        valid_mfccs, valid_folds, valid_labels = zip(*valid_set)
-        valid_mfccs, valid_folds, valid_labels = np.array(valid_mfccs), np.array(valid_folds), np.array(valid_labels)
+        valid_wavs, valid_folds, valid_labels = zip(*valid_set)
+        valid_wavs, valid_folds, valid_labels = np.array(valid_wavs), np.array(valid_folds), np.array(valid_labels)
 
-        valid_sample = len(valid_mfccs)
-        valid_x, valid_y = self.fix_frame(valid_sample, valid_mfccs, valid_folds, valid_labels)
+        valid_sample = len(valid_wavs)
+        valid_x, valid_y = self.fix_frame(valid_sample, valid_wavs, valid_folds, valid_labels)
 
         if config.isPCA:
             pca = PCA(n_components=config.n_pca)
@@ -75,11 +75,11 @@ class KMEANS():
     def test(self, k, test_set):
         # Test Model
         load_model = joblib.load(f"{self.model_path}/kmeans-{k}.pkl")
-        test_mfccs, test_folds, test_labels = zip(*test_set)
-        test_mfccs, test_folds, test_labels = np.array(test_mfccs), np.array(test_folds), np.array(test_labels)
+        test_wavs, test_folds, test_labels = zip(*test_set)
+        test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
-        test_samples = len(test_mfccs)
-        test_x, test_y = self.fix_frame(test_samples, test_mfccs, test_folds, test_labels)
+        test_samples = len(test_wavs)
+        test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
         score = completeness_score(load_model.predict(test_x), np.argmax(test_y, axis=1))
         return score
