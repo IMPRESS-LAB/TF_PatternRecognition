@@ -4,4 +4,5 @@ pandas
 joblib
 scikit-learn
 hmmlearn
-tensorflow==1.15
+tensorflow==2.0
+h5py

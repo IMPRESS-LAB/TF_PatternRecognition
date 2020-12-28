@@ -70,7 +70,7 @@ python train.py --isTrain 0 --data mfc --model cnn
 ### 🔄 모든 단계를 일괄적으로 수행
 
 - 0~2단계를 선택하여 매개변수로 넣어 특징추출/모델훈련/모델추론 과정 수행
-- 선택한 단계의 하위 단계까지 모두 수행 (ex. --step 2; 0~2단계 수행)
+- 선택한 단계의 상위 단계 모두 수행 (ex. --step 0; 0~2단계 수행)
 
 ```console
 python run.py --step [수행단계]
@@ -109,7 +109,7 @@ LSTM (rnn)
 ### ⏬ Dataset
 
 - [UrbanSound8K](https://urbansounddataset.weebly.com/urbansound8k.html)는 8,732개 sample로 구성(10개 class, 4초이하)
-- Download form을 작성 후 다운 받거나, repository에 있는 ./data/wav/* 사용
+- Download form을 작성 후 다운 받아, repository에 있는 ./data/wav/* 에 압축해제
 
 <br/>
 

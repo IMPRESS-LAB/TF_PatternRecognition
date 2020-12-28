@@ -7,6 +7,9 @@ from utils.feature_extractor import parse_metadata
 from utils.kmeans import KMEANS
 from utils.gmm import GMM
 from utils.hmm import HMM
+from utils.dnn import DNN
+from utils.cnn import CNN
+from utils.rnn import LSTM
 
 config = get_config()
 
@@ -23,6 +26,12 @@ if __name__ == '__main__':
         model = GMM()
     elif MODEL_TYPE == 'hmm':
         model = HMM()
+    elif MODEL_TYPE == 'dnn':
+        model = DNN()
+    elif MODEL_TYPE == 'cnn':
+        model = CNN()
+    elif MODEL_TYPE == 'rnn':
+        model = LSTM()
     else:
         raise ValueError
     os.makedirs(model.model_path, exist_ok=True)
