@@ -61,7 +61,6 @@ class LSTM():
         train_sample = len(train_wavs)
         train_x, train_y = self.fix_frame(train_sample, train_wavs, train_folds, train_labels)
 
-        # Test Model
         valid_wavs, valid_folds, valid_labels = zip(*valid_set)
         valid_wavs, valid_folds, valid_labels = np.array(valid_wavs), np.array(valid_folds), np.array(valid_labels)
 
@@ -80,15 +79,12 @@ class LSTM():
                       metrics=['accuracy'])
         for step in range(1, self.step + 1):
             model.fit(train_x, train_y, epochs=10, verbose=1, validation_data=(valid_x, valid_y))  # train
-
-            # Test Model
             _, score = model.evaluate(valid_x, valid_y, verbose=0)
             print('Accuracy:{0:.3f}'.format(score))
 
         model.save(f"{self.model_path}/rnn-{k}.h5")
 
     def test(self, k, test_set):
-        # Test Model
         load_dnn = tf.keras.models.load_model(f"{self.model_path}/rnn-{k}.h5")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
