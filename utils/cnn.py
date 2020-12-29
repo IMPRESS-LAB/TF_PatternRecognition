@@ -19,7 +19,7 @@ class CNN():
         self.n_class = config.n_class
         self.step = config.train_step
         self.learning_rate = config.learning_rate
-        self.dimension = 40 if self.data_type == 'mel' else 23
+        self.dimension = config.mel if self.data_type == 'mel' else config.mfc*3
 
         self.n_unit_1 = config.n_unit_1
         self.n_unit_2 = config.n_unit_2

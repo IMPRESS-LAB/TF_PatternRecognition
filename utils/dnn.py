@@ -22,7 +22,7 @@ class DNN():
         self.n_unit_2 = config.n_unit_2
         self.n_unit_3 = config.n_unit_3
         self.learning_rate = config.learning_rate
-        self.dimension = 40 if self.data_type == 'mel' else 23
+        self.dimension = config.mel if self.data_type == 'mel' else config.mfc*3
 
     def fix_frame(self, batch_size, data, fold, label):
         data_shuffle, labels_shuffle = [], []
