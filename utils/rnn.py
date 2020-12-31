@@ -49,8 +49,8 @@ class LSTM():
     def neural_net(self):
         inputs = keras.Input([self.dimension, config.n_frame])
         lstm_1 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid, return_sequences=True)(inputs)
-        lstm_2 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid, return_sequences=True)(lstm_1)
-        lstm_3 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid)(lstm_2)
+        lstm_2 = keras.layers.LSTM(units=self.n_unit_2, activation=tf.nn.sigmoid, return_sequences=True)(lstm_1)
+        lstm_3 = keras.layers.LSTM(units=self.n_unit_3, activation=tf.nn.sigmoid)(lstm_2)
         output_layer = keras.layers.Dense(self.n_class, activation=tf.nn.softmax)(lstm_3)
         return keras.Model(inputs=inputs, outputs=output_layer)
 
