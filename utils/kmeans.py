@@ -7,7 +7,7 @@ from itertools import chain
 
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklearn.metrics.cluster import completeness_score
+from utils.purity_score import purity_score
 
 from config.config import get_config
 
@@ -69,7 +69,7 @@ class KMEANS():
         kmeans = KMeans(n_clusters=self.n_class, random_state=0).fit(train_x)
         joblib.dump(kmeans, f"{self.model_path}/kmeans-{k}.pkl")
 
-        score = completeness_score(kmeans.predict(valid_x), np.argmax(valid_y, axis=1))
+        score = purity_score(np.argmax(valid_y, axis=1), kmeans.predict(valid_x))
         print('Accuracy:{0:.3f}'.format(score*100))
 
     def test(self, k, test_set):
@@ -81,6 +81,7 @@ class KMEANS():
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        score = completeness_score(load_model.predict(test_x), np.argmax(test_y, axis=1))
+        score = purity_score(np.argmax(test_y, axis=1), load_model.predict(test_x))
+
         return score
 

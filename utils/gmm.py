@@ -6,8 +6,8 @@ import numpy as np
 from itertools import chain
 
 from sklearn.decomposition import PCA
+from utils.purity_score import purity_score
 from sklearn.mixture import GaussianMixture
-from sklearn.metrics.cluster import completeness_score
 
 from config.config import get_config
 
@@ -70,18 +70,18 @@ class GMM():
         gmm = GaussianMixture(n_components=self.component).fit(train_x)
         joblib.dump(gmm, f"{self.model_path}/gmm-{k}.pkl")
 
-        score = completeness_score(gmm.predict(valid_x), np.argmax(valid_y, axis=1))
+        score = purity_score(np.argmax(valid_y, axis=1), gmm.predict(valid_x))
         print('Accuracy:{0:.3f}'.format(score))
 
     def test(self, k, test_set):
         # Test Model
-        load_gmm = joblib.load(f"{self.model_path}/gmm-{k}.pkl")
+        load_model = joblib.load(f"{self.model_path}/gmm-{k}.pkl")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        score = completeness_score(load_gmm.predict(test_x), np.argmax(test_y, axis=1))
-        return score
+        score = purity_score(np.argmax(test_y, axis=1), load_model.predict(test_x))
 
+        return score

@@ -98,12 +98,12 @@ class CNN():
         model.save(f"{self.model_path}/cnn-{k}.h5")
 
     def test(self, k, test_set):
-        load_dnn = tf.keras.models.load_model(f"{self.model_path}/cnn-{k}.h5")
+        load_cnn = tf.keras.models.load_model(f"{self.model_path}/cnn-{k}.h5")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        _, score = load_dnn.evaluate(test_x, test_y, verbose=0)
+        _, score = load_cnn.evaluate(test_x, test_y, verbose=0)
         return score

@@ -42,9 +42,9 @@ parser.add_argument('--n_frame', type=int, default=50, help='Input length to the
 parser.add_argument('--n_class', type=int, default=10, help='Number of classes')
 
 # GMM
-parser.add_argument('--g_component', type=int, default=128, help='Number of components in GMM')
+parser.add_argument('--g_component', type=int, default=10, help='Number of components in GMM')
 # HMM
-parser.add_argument('--h_component', type=int, default=100, help='Number of components in HMM')
+parser.add_argument('--h_component', type=int, default=10, help='Number of states in HMM')
 # DNN, RNN
 parser.add_argument('--train_step', type=int, default=2, help='Number of train steps in DNN, CNN and RNN')
 parser.add_argument('--n_unit_1', type=int, default=512, help='Number of first layer units in DNN, CNN and RNN')

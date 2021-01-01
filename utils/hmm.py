@@ -7,7 +7,7 @@ from itertools import chain
 
 from hmmlearn.hmm import GaussianHMM
 from sklearn.decomposition import PCA
-from sklearn.metrics.cluster import completeness_score
+from utils.purity_score import purity_score
 
 from config.config import get_config
 
@@ -69,19 +69,19 @@ class HMM():
 
         hmm = GaussianHMM(n_components=self.component)
         hmm.fit(train_x)
-        joblib.dump(hmm, f"{self.model_path}/hmm-{k}.pkl")
+        joblib.dump(hmm, f"{self.model_path}/hmm10-{k}.pkl")
 
-        score = completeness_score(hmm.predict(valid_x), np.argmax(valid_y, axis=1))
+        score = purity_score(np.argmax(valid_y, axis=1), np.argmax(hmm.predict_proba(valid_x)))
         print('Accuracy:{0:.3f}'.format(score))
 
     def test(self, k, test_set):
         # Test Model
-        load_gmm = joblib.load(f"{self.model_path}/gmm-{k}.pkl")
+        load_model = joblib.load(f"{self.model_path}/gmm-{k}.pkl")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        score = completeness_score(load_gmm.predict(test_x), np.argmax(test_y, axis=1))
+        score = purity_score(load_model.predict(test_x), np.argmax(test_y, axis=1))
         return score
