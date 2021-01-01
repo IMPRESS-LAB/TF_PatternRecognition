@@ -49,8 +49,8 @@ class LSTM():
     def neural_net(self):
         inputs = keras.Input([self.dimension, config.n_frame])
         lstm_1 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid, return_sequences=True)(inputs)
-        lstm_2 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid, return_sequences=True)(lstm_1)
-        lstm_3 = keras.layers.LSTM(units=self.n_unit_1, activation=tf.nn.sigmoid)(lstm_2)
+        lstm_2 = keras.layers.LSTM(units=self.n_unit_2, activation=tf.nn.sigmoid, return_sequences=True)(lstm_1)
+        lstm_3 = keras.layers.LSTM(units=self.n_unit_3, activation=tf.nn.sigmoid)(lstm_2)
         output_layer = keras.layers.Dense(self.n_class, activation=tf.nn.softmax)(lstm_3)
         return keras.Model(inputs=inputs, outputs=output_layer)
 
@@ -85,12 +85,12 @@ class LSTM():
         model.save(f"{self.model_path}/rnn-{k}.h5")
 
     def test(self, k, test_set):
-        load_rnn = tf.keras.models.load_model(f"{self.model_path}/rnn-{k}.h5")
+        load_dnn = tf.keras.models.load_model(f"{self.model_path}/rnn-{k}.h5")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        _, score = load_rnn.evaluate(test_x, test_y, verbose=0)
+        _, score = load_dnn.evaluate(test_x, test_y, verbose=0)
         return score
