@@ -75,22 +75,21 @@ class DNN():
 
         model = self.neural_net()
         # model.summary()
-        model.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
-                      metrics=['accuracy'])
-        for step in range(1, self.step + 1):
-            model.fit(train_x, train_y, epochs=10, verbose=1, validation_data=(valid_x, valid_y))  # train
-            _, score = model.evaluate(valid_x, valid_y, verbose=0)
-            print('Accuracy:{0:.3f}'.format(score))
-
-        model.save(f"{self.model_path}/dnn-{k}.h5")
+        model.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate), metrics=['accuracy'])
+        checkpoint = keras.callbacks.ModelCheckpoint(filepath=f"{self.model_path}/dnn-{k}.h5", verbose=0, save_best_only=True)
+        model.fit(train_x, train_y, epochs=self.step, verbose=1, validation_data=(valid_x, valid_y), callbacks=[checkpoint])  # train
 
     def test(self, k, test_set):
-        load_dnn = tf.keras.models.load_model(f"{self.model_path}/dnn-{k}.h5")
         test_wavs, test_folds, test_labels = zip(*test_set)
         test_wavs, test_folds, test_labels = np.array(test_wavs), np.array(test_folds), np.array(test_labels)
 
         test_samples = len(test_wavs)
         test_x, test_y = self.fix_frame(test_samples, test_wavs, test_folds, test_labels)
 
-        _, score = load_dnn.evaluate(test_x, test_y, verbose=0)
+        model = self.neural_net()
+        model.compile(loss='categorical_crossentropy',
+                      optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
+                      metrics=['accuracy'])
+        model.load_weights(f"{self.model_path}/dnn-{k}.h5")
+        _, score = model.evaluate(test_x, test_y, verbose=2)
         return score
